@@ -1,12 +1,12 @@
 #pragma once
 
-#include "window_mini.h"
+#include "window_base.h"
 
 
-class TestWindow : public WindowMini
+class TestWindow : public GLWindowBase
 {
 public:
-    TestWindow(SDLApplication *app, int w, int h) : WindowMini(app, w, h) {
+    TestWindow(SDLApplication *app, int w, int h) : GLWindowBase(app, w, h) {
         setTitle("Sample");
     }
 protected:
