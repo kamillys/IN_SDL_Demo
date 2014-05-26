@@ -6,45 +6,41 @@
 #include <stdexcept>
 #include <glm/glm.hpp>
 
+#include "OpenGL/Geometry.h"
+
 namespace mini
 {
 class Mesh
 {
-//public:
-//    Mesh();
-//    Mesh(std::vector<mini::dx_ptr<ID3D11Buffer>>&& vbuffers,
-//         std::vector<unsigned int>&& vstrides,
-//         std::vector<unsigned int>&& voffsets,
-//         mini::dx_ptr<ID3D11Buffer>&& indices,
-//         unsigned int indexCount,
-//         unsigned int materialIdx);
+public:
+    Mesh();
+    Mesh(std::vector<glm::vec3>&& positions,
+         std::vector<glm::vec2>&& texCoords,
+         std::vector<unsigned short>&& pindices,
+         std::vector<glm::vec3>&& normals,
+         unsigned int materialIdx);
 
-//    Mesh(Mesh&& right);
-//    ~Mesh();
+    Mesh(Mesh&& right);
+    ~Mesh();
 
-//    Mesh& operator=(Mesh&& right);
-//    void Render(const mini::dx_ptr<ID3D11DeviceContext>& context);
-//    const DirectX::XMFLOAT4X4& getTransform() const { return m_transform; }
-//    void setTransform(const DirectX::XMFLOAT4X4& transform) { m_transform = transform; }
+    Mesh& operator=(Mesh&& right);
+    void Render(VBGL::ShaderProgram* shader/*const mini::dx_ptr<ID3D11DeviceContext>& context*/);
+    const glm::mat4& getTransform() const { return m_transform; }
+    void setTransform(const glm::mat4& transform) { m_transform = transform; }
 
-//    unsigned int getMaterialIdx() const { return m_materialIdx; }
-//    void setMaterialIdx(unsigned int idx) { m_materialIdx = idx; }
+    unsigned int getMaterialIdx() const { return m_materialIdx; }
+    void setMaterialIdx(unsigned int idx) { m_materialIdx = idx; }
 
 private:
-    Mesh(const Mesh& right)
-    {/*do not use*/ throw std::logic_error("Mesh copy constructor should never be called!"); }
+    Mesh(const Mesh& right) = delete;
+    //{/*do not use*/ throw std::logic_error("Mesh copy constructor should never be called!"); }
 
-    Mesh& operator=(const Mesh& right)
-    { /*do not use*/ throw std::logic_error("Mesh copy assignment should never be called!"); }
-//    void Release();
+    Mesh& operator=(const Mesh& right) = delete;
+    //{ /*do not use*/ throw std::logic_error("Mesh copy assignment should never be called!"); }
+    void Release();
 
-//    mini::dx_ptr<ID3D11Buffer> m_indexBuffer;
-//    std::unique_ptr<ID3D11Buffer*[]> m_vertexBuffers;
-//    std::unique_ptr<unsigned int[]> m_strides;
-//    std::unique_ptr<unsigned int[]> m_offsets;
-//    DirectX::XMFLOAT4X4 m_transform;
-//    unsigned int m_buffersCount;
-//    unsigned int m_indexCount;
-//    unsigned int m_materialIdx;
+    VTF::RefPointer<VBGL::Geometry> m_geometry;
+    glm::mat4 m_transform;
+    unsigned int m_materialIdx;
 };
 }

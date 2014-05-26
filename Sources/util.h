@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string>
 
 //Source: Boost.
 #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
@@ -21,6 +22,12 @@
 # define __VTF__FUNCTIONNAME__ "(unknown)"
 #endif
 
+//WARNING: unsafe with templates
+#define NONCOPYABLE(type) \
+    private: \
+    type(const type&); \
+    type& operator=(const type&);
+
 
 #define SDL_ASSERT_SUCCESS(v, x) \
 { \
@@ -28,6 +35,9 @@
     assert(v==retval); \
 }
 
+#define UNUSED(x) (void)(x)
 
 void DebugLog(const char* format, ...);
 void DebugLogV(const char* m);
+
+std::string loadFile(const char* filename);

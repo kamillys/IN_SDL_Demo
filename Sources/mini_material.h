@@ -1,11 +1,19 @@
 #pragma once
 
+//Forward declaration
+namespace mini {
+class Material;
+}
+
 #include <glm/glm.hpp>
 #include <stdexcept>
+#include "OpenGL/texture2d.h"
+
 //#include "mini_dxptr.h"
 
 namespace mini
 {
+//TODO: Whole thing
 class Material
 {
 public:
@@ -22,19 +30,19 @@ public:
     const MaterialData& getMaterialData() const { return m_data; }
     void setMaterialData(const MaterialData& data) { m_data = data; }
 
-    //const mini::dx_ptr<ID3D11ShaderResourceView>& getDiffuseTexture() { return m_diffuseTexture; }
-    //void setDiffuseTexture(mini::dx_ptr<ID3D11ShaderResourceView>&& tex) { m_diffuseTexture = move(tex); }
-    //const mini::dx_ptr<ID3D11ShaderResourceView>& getSpecularTexture() { return m_specularTexture; }
-    //void setSpecularTexture(mini::dx_ptr<ID3D11ShaderResourceView>&& tex) { m_specularTexture = move(tex); }
+    VTF::RefPointer<VBGL::Texture2D>& getDiffuseTexture() { return m_diffuseTexture; }
+    void setDiffuseTexture(VTF::RefPointer<VBGL::Texture2D>&& tex) { m_diffuseTexture = std::move(tex); }
+    VTF::RefPointer<VBGL::Texture2D>& getSpecularTexture() { return m_specularTexture; }
+    void setSpecularTexture(VTF::RefPointer<VBGL::Texture2D>&& tex) { m_specularTexture = std::move(tex); }
 
 private:
-    Material(const Material& right) { /*do not use!*/ throw std::logic_error("Material copy constructor called!"); }
-    Material& operator =(const Material& right) { /*do not use*/ throw std::logic_error("Material copy assignment called!"); }
+    Material(const Material& right) = delete; //{ /*do not use!*/ throw std::logic_error("Material copy constructor called!"); }
+    Material& operator =(const Material& right) = delete; // { /*do not use*/ throw std::logic_error("Material copy assignment called!"); }
 
     void Release();
 
     MaterialData m_data;
-    //mini::dx_ptr<ID3D11ShaderResourceView> m_diffuseTexture;
-    //mini::dx_ptr<ID3D11ShaderResourceView> m_specularTexture;
+    VTF::RefPointer<VBGL::Texture2D> m_diffuseTexture;
+    VTF::RefPointer<VBGL::Texture2D> m_specularTexture;
 };
 }

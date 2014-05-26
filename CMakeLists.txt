@@ -29,9 +29,9 @@ else()
 endif()
 
 # Enable C++11
-list( APPEND CMAKE_CXX_FLAGS "-std=c++0x" )
+list( APPEND CMAKE_CXX_FLAGS "-std=c++11" )
 
-pkg_check_modules(SDL2 REQUIRED sdl2 gl glu glew)
+pkg_check_modules(SDL2 REQUIRED sdl2 SDL2_image gl glu glew)
 set(INCLUDEDIRS ${INCLUDEDIRS} ${SDL2_INCLUDE_DIRS})
 set(PROJECTLIBS ${PROJECTLIBS} ${SDL2_LIBRARIES} )
 
@@ -45,6 +45,7 @@ include_directories(${INCLUDEDIRS})
 
 ##Project sources
 file(GLOB_RECURSE SRC_LIST ${PROJECT_SOURCES_PATH}/*)
+set(SRC_LIST ${SRC_LIST} textured_fs.glsl textured_vs.glsl)
 
 #Executable
 add_executable(${PROJECT_NAME} ${SRC_LIST})

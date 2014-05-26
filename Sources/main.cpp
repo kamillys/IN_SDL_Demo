@@ -1,5 +1,6 @@
 #include <memory>
 
+#include "OpenGL/myGL.h"
 #include "sdl_application.h"
 #include "exception.h"
 #include "in_scene.h"

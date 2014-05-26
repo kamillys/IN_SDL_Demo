@@ -1,3 +1,5 @@
+#include <glew.h>
+
 #include "window_base.h"
 #include "util.h"
 
@@ -5,14 +7,14 @@ GLWindowBase::GLWindowBase(SDLApplication *app, int width, int height) :
     displayWindow(nullptr),
     _w(width), _h(height)
 {
-    //Use OpenGL 3.1 core
-    //SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
-    //SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
-    //SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
+    //Use OpenGL 3.0 core
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 0 );
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
 
     //Use OpenGL 2.1
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
+    //SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
+    //SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
 
     displayWindow = SDL_CreateWindow( "", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                 width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
@@ -27,6 +29,12 @@ GLWindowBase::GLWindowBase(SDLApplication *app, int width, int height) :
     }
 
     app->registerWindow(this);
+
+
+    glewExperimental = GL_FALSE;
+    //glewExperimental = GL_TRUE;
+    GLenum glew_result = glewInit();
+    assert(glew_result == GLEW_OK);
 }
 
 GLWindowBase::~GLWindowBase()

@@ -22,14 +22,17 @@ public:
     SceneGraph& operator=(SceneGraph&& right);
 
     int nodeByName(const std::string& name) const;
-    DirectX::XMFLOAT4X4 getNodeTransform(unsigned nodeIndex) const;
-    void setNodeTransform(unsigned int nodeIndex, const DirectX::XMFLOAT4X4& transform);
+    glm::mat4 getNodeTransform(unsigned nodeIndex) const;
+    void setNodeTransform(unsigned int nodeIndex, const glm::mat4& transform);
     int nodeFirstChild(unsigned int nodeIndex) const;
     int nodeNextSybling(unsigned int nodeIndex) const;
     int nodeParent(unsigned int nodeIndex) const;
 
     unsigned int meshCount() const { return m_meshes.size(); }
-    Mesh& getMesh(unsigned int index) { return m_meshes.at(index); }
+    Mesh& getMesh(unsigned int index)
+    {
+        return m_meshes.at(index);
+    }
     mini::Material& getMaterial(unsigned int index) { return m_materials.at(index); }
 
 private:
@@ -37,7 +40,7 @@ private:
     { /*do not use*/ throw std::logic_error("SceneGraph copy constructor called!"); }
     SceneGraph& operator=(const SceneGraph& right)
     { /*do not use*/ throw std::logic_error("SceneGraph copy assignment called!"); }
-    void UpdateChildTransforms(unsigned int childIdx, DirectX::CXMMATRIX parentTransform);
+    void UpdateChildTransforms(unsigned int childIdx, glm::mat4 parentTransform);
 
     void Clear();
 

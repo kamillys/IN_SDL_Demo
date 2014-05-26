@@ -1,10 +1,11 @@
+#include <SDL_events.h>
+
 #include "sdl_application.h"
 
-#include <SDL_events.h>
 
 SDLApplication::SDLApplication()
 {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
 }
 
 SDLApplication::~SDLApplication()
@@ -62,6 +63,8 @@ void SDLApplication::mainLoop()
         //Event has been processed. Render
         render();
         //Then sleep
+        for (int i=0; i<windows.size(); ++i)
+            windows[i]->Update(0.01);
     }
 }
 

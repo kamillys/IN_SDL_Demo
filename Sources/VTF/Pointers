@@ -1,0 +1,5 @@
+#pragma once
+
+#include <VTF/pointer/ownptr.h>
+#include <VTF/pointer/refptr.h>
+#include <VTF/pointer/RefObject.h>

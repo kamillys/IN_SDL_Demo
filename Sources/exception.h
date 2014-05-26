@@ -34,8 +34,6 @@ public:
 
 };
 
-}
-
 /*
  * Macros for defining exception types
  */
@@ -70,4 +68,7 @@ do { \
 EXCEPTION(UnknownException);
 EXCEPTION(NullPointerException);
 EXCEPTION(AccessException);
+EXCEPTION(ParsingException);
 EXCEPTION_S(OutOfIndexException, AccessException);
+
+}
