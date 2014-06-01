@@ -2,6 +2,7 @@
 #include "OpenGL/GLStateManager.h"
 #include <glm/gtc/swizzle.hpp>
 #include <cmath>
+#include "util.h"
 
 #include "mini_xfileLoader.h"
 
@@ -16,81 +17,154 @@ void JoyButton(const SDL_Event &e)
               << "\n";
 }
 
-void ProcessWindowEvent(const SDL_Event& e)
-{
-    switch(e.window.event)
-    {
-    case SDL_WINDOWEVENT_ENTER:
-        fprintf(stderr, "Mouse entered our window! windowID = %d \n", e.window.windowID);
-        break;
-    case SDL_WINDOWEVENT_LEAVE:
-        fprintf(stderr, "Mouuse left the window! windowID = %d \n", e.window.windowID);
-        break;
-    }
-}
-
 void INScene::ProcessEvent(const SDL_Event &e)
 {
+    SDL_Scancode code;
     switch(e.type)
     {
     case SDL_JOYAXISMOTION:
+        //SDL_Log("Joystick %d axis %d value: %d\n", e.jaxis.which, e.jaxis.axis, e.jaxis.value);
+        break;
     case SDL_JOYBALLMOTION:
+        break;
     case SDL_JOYHATMOTION:
-    case SDL_JOYBUTTONUP:
+        SDL_Log("Joystick %d hat %d value:", e.jhat.which, e.jhat.hat);
+        if (e.jhat.value == SDL_HAT_CENTERED) SDL_Log(" centered");
+        if (e.jhat.value & SDL_HAT_UP) SDL_Log(" up");
+        if (e.jhat.value & SDL_HAT_RIGHT) SDL_Log(" right");
+        if (e.jhat.value & SDL_HAT_DOWN) SDL_Log(" down");
+        if (e.jhat.value & SDL_HAT_LEFT) SDL_Log(" left");
+        SDL_Log("\n");
+        break;
     case SDL_JOYBUTTONDOWN:
+        SDL_Log("Joystick %d button %d down\n", e.jbutton.which, e.jbutton.button);
+        break;
+    case SDL_JOYBUTTONUP:
+        SDL_Log("Joystick %d button %d up\n", e.jbutton.which, e.jbutton.button);
+        break;
     case SDL_JOYDEVICEADDED:
+        if (joystickPresent) break;
+        joystick = SDL_JoystickOpen(e.jdevice.which);
+        joystickPresent = joystick != nullptr;
+        std::cerr << "Joystick added!\n";
+        break;
     case SDL_JOYDEVICEREMOVED:
-        std::cerr << "JOYEVENT" << std::endl;
+        std::cerr << "Some joystick removed!" << std::endl;
+        if (SDL_JoystickInstanceID(joystick) == e.jdevice.which)
+        {
+            std::cerr << "Disconnected joystick!" << std::endl;
+            joystickPresent = false;
+            SDL_JoystickClose(joystick);
+            joystick = nullptr;
+        }
+        break;
     case SDL_KEYDOWN:
-        //if (e.key.keysym.sym == SDLK_w)
-        //    keyUp = true;
+        code = e.key.keysym.scancode;
+        //Asynchronous
+        /*
+        if (code == keyMapping[ActionKey::MoveUp]) keyUp = true;
+        if (code == keyMapping[ActionKey::MoveDown]) keyDown = true;
+        if (code == keyMapping[ActionKey::MoveLeft]) keyLeft = true;
+        if (code == keyMapping[ActionKey::MoveRight]) keyRight = true;
+        */
+        doAction |= (code == keyMapping[ActionKey::Action]);
         break;
     case SDL_KEYUP:
-        //if (e.key.keysym.sym == SDLK_w)
-        //    keyUp = false;
+        code = e.key.keysym.scancode;
+        //Asynchronous
+        /*
+        if (code == keyMapping[ActionKey::MoveUp]) keyUp = false;
+        if (code == keyMapping[ActionKey::MoveDown]) keyDown = false;
+        if (code == keyMapping[ActionKey::MoveLeft]) keyLeft = false;
+        if (code == keyMapping[ActionKey::MoveRight]) keyRight = false;
+        */
+        break;
+    case SDL_MOUSEMOTION:
+        /*
+        mouseX = -0.005 * e.motion.xrel;
+        mouseY = -0.005 * e.motion.yrel;
+        m_camera.Rotate(mouseY, mouseX);
+        */
     default: break;
     }
 }
 
+void INScene::loadKeyMapping()
+{
+    keyMapping[ActionKey::MoveUp] = confReader.getKeyMap("MoveUp", "W");
+    keyMapping[ActionKey::MoveDown] = confReader.getKeyMap("MoveDown", "S");
+    keyMapping[ActionKey::MoveLeft] = confReader.getKeyMap("MoveLeft", "A");
+    keyMapping[ActionKey::MoveRight] = confReader.getKeyMap("MoveRight", "D");
+    keyMapping[ActionKey::Action] = confReader.getKeyMap("Action", "E");
+
+    //padDriver.setJoyMap("MoveUp", confReader.getString("JMoveUp", "NegY"));
+    //padDriver.setJoyMap("MoveDown", confReader.getString("JMoveDown", "PosY"));
+    //padDriver.setJoyMap("MoveLeft", confReader.getString("JMoveLeft", "NegX"));
+    //padDriver.setJoyMap("MoveRight", confReader.getString("JMoveRight", "PosX"));
+    //padDriver.setJoyMap("Action", confReader.getString("JAction", "Button1"));
+    //padDriver.setJoyMap("MoveUp", "dpadYpos");
+}
+
+Sint16 clamp(Sint16 v, Sint16 m, Sint16 M)
+{
+    return v < m ? m : v > M ? M : v;
+}
+
 void INScene::Update(float dt)
 {
+    double speed = -3;
+
     //Using Synchronous:
+    //Begin synch
+
+    if (!joystickPresent)
+    {
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
-    keyUp = keys[SDL_SCANCODE_W];
-    keyDown = keys[SDL_SCANCODE_S];
-    keyLeft = keys[SDL_SCANCODE_A];
-    keyRight = keys[SDL_SCANCODE_D];
+    keyUp = keys[keyMapping[ActionKey::MoveUp]];
+    keyDown = keys[keyMapping[ActionKey::MoveDown]];
+    keyLeft = keys[keyMapping[ActionKey::MoveLeft]];
+    keyRight = keys[keyMapping[ActionKey::MoveRight]];
+    keyAction = keys[keyMapping[ActionKey::Action]];
+    } else
+    {
+        Sint16 Xaxis = SDL_JoystickGetAxis(joystick, 0);
+        Xaxis = -clamp(Xaxis, -10000, 10000);
+        float XSpeed = Xaxis / 10000.0;
+        Sint16 Yaxis = SDL_JoystickGetAxis(joystick, 1);
+        Yaxis = -clamp(Yaxis, -10000, 10000);
+        float YSpeed = Yaxis / 10000.0;
+        keyAction = SDL_JoystickGetButton(joystick, 0);
+        MoveCharacter(XSpeed * speed * dt, YSpeed * speed * dt);
+    }
+    doAction = keyAction && !prevAction;
+    prevAction = keyAction;
 
-    SDL_GetRelativeMouseState(&mouseX, &mouseY);
-    if (mouseInited)
-    {
-        m_camera.Rotate(-0.005 * mouseY, -0.005 * mouseX);
-    }
-    else
-    {
-        //SDL_SetWindowGrab(window(), SDL_TRUE);
-        SDL_SetRelativeMouseMode(SDL_TRUE);
-        mouseInited = true;
-    }
+    int imouseX, imouseY;
+    SDL_GetRelativeMouseState(&imouseX, &imouseY);
+    mouseX = -0.005 * imouseX;
+    mouseY = -0.005 * imouseY;
 
-    static bool lastE = false;
-    bool keyE = keys[SDL_SCANCODE_E];
-    if (keyE && !lastE)
-    {
-        action();
-    }
-    lastE = keyE;
+    //End Synch
 
     int dx = 0;
     int dy = 0;
-    double speed = -3;
 
-    if (keyUp) dx += 1;
-    if (keyDown) dx -= 1;
-    if (keyLeft) dy += 1;
-    if (keyRight) dy -= 1;
+    if (!joystickPresent)
+    {
+        if (keyUp) dx += 1;
+        if (keyDown) dx -= 1;
+        if (keyLeft) dy += 1;
+        if (keyRight) dy -= 1;
+        MoveCharacter(speed*dy*dt, speed*dx*dt);
+    }
 
-    MoveCharacter(speed*dy*dt, speed*dx*dt);
+    if (doAction)
+        action();
+    doAction = false;
+
+    //Comment in case of async
+    m_camera.Rotate(mouseY, mouseX);
+
 
     m_counter.NextFrame(dt);
     UpdateDoor(dt);
@@ -216,6 +290,31 @@ void INScene::displayGL()
 
 void INScene::initGL()
 {
+    /*
+    joystickPresent = SDL_NumJoysticks() > 0;
+    if (joystickPresent)
+    {
+        joystick = SDL_JoystickOpen(0);
+        if (joystick == NULL) {
+            DebugLog("SDL_JoystickOpen failed: %s", SDL_GetError());
+        } else
+        {
+            char guid[64];
+            SDL_JoystickGetGUIDString(SDL_JoystickGetGUID(joystick),
+                                      guid, sizeof (guid));
+            SDL_Log("       axes: %d\n", SDL_JoystickNumAxes(joystick));
+            SDL_Log("      balls: %d\n", SDL_JoystickNumBalls(joystick));
+            SDL_Log("       hats: %d\n", SDL_JoystickNumHats(joystick));
+            SDL_Log("    buttons: %d\n", SDL_JoystickNumButtons(joystick));
+            SDL_Log("instance id: %d\n", SDL_JoystickInstanceID(joystick));
+            SDL_Log("       guid: %s\n", guid);
+            SDL_JoystickClose(joystick);
+        }
+    }*/
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+    //SDL_SetWindowGrab(window(), SDL_TRUE);
+
+    loadKeyMapping();
     //Enable texturing
     glEnable(GL_TEXTURE_2D);
 

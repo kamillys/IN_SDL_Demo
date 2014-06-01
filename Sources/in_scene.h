@@ -13,21 +13,30 @@
 
 #include "OpenGL/shader.h"
 
+#include "confReader.h"
+
 class INScene : public GLWindowBase
 {
 public:
     INScene(SDLApplication *app, int w, int h)
         : GLWindowBase(app, w, h),
-          m_camera(glm::vec3(0, 1.6f, 0))
+          m_camera(glm::vec3(0, 1.6f, 0)),
+          joystick(nullptr)
     {
-        setTitle("Sample");
+        setTitle("SDL Window");
         keyUp = false;
         keyDown = false;
         keyLeft = false;
         keyRight = false;
         mouseInited = false;
+        prevAction = false;
+        keyAction = false;
     }
-    virtual ~INScene(){}
+    virtual ~INScene()
+    {
+        if (joystick)
+            SDL_JoystickClose(joystick);
+    }
 
 protected:
 
@@ -35,8 +44,25 @@ protected:
     bool keyDown;
     bool keyLeft;
     bool keyRight;
-    int mouseX, mouseY;
+    double mouseX, mouseY;
     bool mouseInited;
+    bool prevAction;
+    bool keyAction;
+    bool doAction;
+
+    bool joystickPresent = false;
+    SDL_Joystick *joystick;
+
+    enum class ActionKey {
+            MoveUp,
+            MoveDown,
+            MoveLeft,
+            MoveRight,
+            Action
+    };
+    std::map<ActionKey, SDL_Scancode> keyMapping;
+    ConfigReader confReader;
+    void loadKeyMapping();
 
     void action();
 

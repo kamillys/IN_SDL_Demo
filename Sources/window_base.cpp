@@ -86,7 +86,8 @@ void GLWindowBase::ProcessSDLEvent(const SDL_Event &event)
     default: ProcessEvent(event);
     }
 }
-
+//Disable logging here
+#define SDL_Log(x...)
 void GLWindowBase::ProcessWindowEvent(const SDL_Event &event)
 {
     switch (event.window.event) {
