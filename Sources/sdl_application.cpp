@@ -1,4 +1,6 @@
 #include <SDL_events.h>
+#include <chrono>
+#include <thread>
 
 #include "sdl_application.h"
 
@@ -23,7 +25,11 @@ void SDLApplication::mainLoop()
     initialize();
     SDL_Event e;
     bool finish = false;
+    auto nowTime = std::chrono::high_resolution_clock::now();
+    auto prevTime = std::chrono::high_resolution_clock::now();
     while(!finish) {
+
+
         while (SDL_PollEvent(&e)) {
             switch(e.type) {
             case SDL_QUIT: finish = true; break;
@@ -60,11 +66,21 @@ void SDLApplication::mainLoop()
             default: parseGlobalEvent(e); break;
             }
         }
-        //Event has been processed. Render
+        //Events has been processed.
+        //Compute delta time
+        nowTime = std::chrono::high_resolution_clock::now();
+        auto deltaTime = nowTime - prevTime;
+        std::chrono::duration<double> elapsed_seconds = deltaTime;
+        auto deltaTimeMS = std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime).count();
+        prevTime = nowTime;
+
+        //Update
+        update(elapsed_seconds.count());
+        //Render
         render();
         //Then sleep
-        for (int i=0; i<windows.size(); ++i)
-            windows[i]->Update(0.01);
+        if (deltaTimeMS < 20)
+            std::this_thread::sleep_for(std::chrono::milliseconds(20 - deltaTimeMS));
     }
 }
 
@@ -72,6 +88,12 @@ void SDLApplication::initialize()
 {
     for (int i=0; i<windows.size(); ++i)
         windows[i]->initialize();
+}
+
+void SDLApplication::update(double T)
+{
+    for (int i=0; i<windows.size(); ++i)
+        windows[i]->Update(0.01);
 }
 
 void SDLApplication::render()

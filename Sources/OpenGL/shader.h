@@ -37,6 +37,10 @@ public:
     GLint getAttribLocation(const char* name);
     GLint getUniformLocation(const char* name);
 
+#define _PRIVATE_SHADER_UNIFORM_TYPE_CONST \
+    X(GLint, glUniform1i) \
+    X(GLfloat, glUniform1f)
+
 #define _PRIVATE_SHADER_UNIFORM_TYPE_MAT \
     X(glm::mat2, glUniformMatrix2fv) \
     X(glm::mat3, glUniformMatrix3fv) \
@@ -60,6 +64,7 @@ public:
 #define X(type, proc) \
     void setUniform(const char* name, const type& data);
     _PRIVATE_SHADER_UNIFORM_TYPE_VEC
+    _PRIVATE_SHADER_UNIFORM_TYPE_CONST
 #undef X
 
 

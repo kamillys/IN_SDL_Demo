@@ -21,8 +21,9 @@ class SDLApplication
     void registerWindow(GLWindowBase* win);
     void parseWindowEvent(const SDL_Event &event, Uint32 windowID);
     void parseGlobalEvent(const SDL_Event &event);
-    void render();
     void initialize();
+    void render();
+    void update(double T);
 public:
     SDLApplication();
     ~SDLApplication();

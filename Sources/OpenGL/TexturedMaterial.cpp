@@ -23,30 +23,26 @@ TexturedMaterial::~TexturedMaterial()
 void TexturedMaterial::bind()
 {
     glm::mat4 mvp = m_cbProj * m_cbView * m_cbModel;
-//    std::cerr << "\n===============================\n";
-//    std::cerr << m_cbProj;
-//    std::cerr << "\n===============================\n";
-//    std::cerr << m_cbView;
-//    std::cerr << "\n===============================\n";
-//    std::cerr << m_cbModel;
-//    std::cerr << "\n===============================\n";
-//    std::cerr << mvp;
-//    std::cerr << "\n===============================";
-//    std::cerr << "\n===============================";
-//    std::cerr << "\n===============================\n";
+    glm::mat4 itmvp = glm::inverseTranspose(mvp);
+    shader->setUniform("UView", m_cbView);
+    shader->setUniform("UModelView", m_cbView * m_cbModel);
     shader->setUniform("UMVP", mvp);
+    shader->setUniform("UNormalMatrix", itmvp);
     shader->setUniform("diffuseColor", m_cbMaterial->getMaterialData().diffuseColor);
     shader->setUniform("specularColor", m_cbMaterial->getMaterialData().specularColor);
 
     VBGL::Texture2D* diffTex = m_cbMaterial->getDiffuseTexture();
     VBGL::Texture2D* specTex = m_cbMaterial->getSpecularTexture();
+
     if (diffTex)
     {
+        shader->setUniform("diffuseTex", 0);
         glActiveTexture( GL_TEXTURE0 );
         diffTex->bind();
     }
     if (specTex)
     {
+        shader->setUniform("specularTex", 1);
         glActiveTexture( GL_TEXTURE1 );
         specTex->bind();
     }

@@ -157,6 +157,17 @@ void ShaderProgram::setUniform(const char *name, const type& data) { \
 _PRIVATE_SHADER_UNIFORM_TYPE_VEC
 #undef X
 
+#define X(type, proc) \
+void ShaderProgram::setUniform(const char *name, const type& data) { \
+    bind(); \
+    if (!compiled) \
+        THROW_EXCEPTION("Shader must be compiled to set variables!"); \
+    proc(getUniformLocation(name), data); \
+    CHECK_GL_ERRORS("Shader setUniform " #type); \
+}
+_PRIVATE_SHADER_UNIFORM_TYPE_CONST
+#undef X
+
 static GLuint loadShader(const char* src, GLenum type) {
     int logLength;
     GLint result;

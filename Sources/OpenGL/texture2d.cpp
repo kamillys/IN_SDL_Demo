@@ -64,52 +64,38 @@ void Texture2D::setDefaultParameters()
 }
 
 #include <SDL2/SDL_image.h>
-#include <vector>
 
 VTF::RefPointer<Texture2D> Texture2D::loadTexture(const char *path)
 {
     SDL_Surface* surface = IMG_Load(path);
     if (!surface)
         THROW_EXCEPTION("Cannot load image!");
-    SDL_FreeSurface(surface);
 
     GLenum Mode = 0;
-    if (!surface->format) {
-        Mode = GL_RGBA;//Set default
-    } else {
-        switch (surface->format->BytesPerPixel) {
-        case 1: {
-            Mode = GL_ALPHA;
-            break;
-        }
-        case 3: {
-            Mode = GL_RGB;
-            break;
-        }
-        case 4: {
-            Mode = GL_RGBA;
-            break;
-        }
-        default: { break;
-        }
-        }
-    }
-
-    std::vector<u_int8_t> pixels(surface->w * surface->h);
-    for (int i=0;i<surface->h;++i)
-    {
-        memcpy(pixels.data()+i*surface->w, surface->pixels+i*surface->pitch, surface->w);
+    switch (surface->format->BytesPerPixel) {
+    case 1:
+        Mode = GL_ALPHA;
+        break;
+    case 3:
+        Mode = GL_RGB;
+        break;
+    case 4:
+        Mode = GL_RGBA;
+        break;
+    default:
+        THROW_EXCEPTION("Invalid texture format!");
+        break;
     }
 
     VTF::RefPointer<Texture2D> texture = new Texture2D;
     texture->bind();
 
-    //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    //glPixelStorei(GL_UNPACK_ROW_LENGTH,surface->pitch);
-    glTexImage2D(GL_TEXTURE_2D, 0, Mode, surface->w, surface->h, 0, Mode, GL_UNSIGNED_BYTE, pixels.data());
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0, Mode, surface->w, surface->h, 0, Mode, GL_UNSIGNED_BYTE, surface->pixels);
 
     texture->setDefaultParameters();
     texture->setWrap(GL_REPEAT, GL_REPEAT);
+    SDL_FreeSurface(surface);
 
     return texture;
 }

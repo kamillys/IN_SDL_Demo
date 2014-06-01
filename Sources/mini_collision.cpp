@@ -12,13 +12,13 @@ OrientedBoundingRectangle::OrientedBoundingRectangle(glm::vec2 corner,
 {
     glm::vec2 c = corner;
     glm::mat4 m =
-            glm::scale(mat4(), vec3(width, height, 0))*
-            glm::rotate(mat4(), degrees(rotation), vec3(0,0,1));
+            glm::rotate(mat4(), degrees(rotation), vec3(0,0,1)) *
+            glm::scale(mat4(), vec3(width, height, 0));
 
     glm::vec2 dx(1, 0);
     glm::vec2 dy(0, 1);
     dx = vec2(m*vec4(dx, 0, 0));
-    dx = vec2(m*vec4(dy, 0, 0));
+    dy = vec2(m*vec4(dy, 0, 0));
     if (width < 0 && height > 0)
     {
         c += dx;

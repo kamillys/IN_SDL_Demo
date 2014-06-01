@@ -53,11 +53,11 @@ namespace mini
                 float Distance(const BoundingCircle& c);
                 glm::vec2 getP1() { return m_corner; }
                 glm::vec2 getP2()
-                { return glm::vec2(m_corner.x + m_dx.x, m_corner.y + m_dx.y); }
+                { return m_corner + m_dx; }
                 glm::vec2 getP3()
-                { return glm::vec2(m_corner.x + m_dx.x + m_dy.x, m_corner.y + m_dx.y + m_dy.y); }
+                { return m_corner + m_dx + m_dy; }
                 glm::vec2 getP4()
-                { return glm::vec2(m_corner.x + m_dy.x, m_corner.y + m_dy.y); }
+                { return m_corner + m_dy; }
 
         private:
                 glm::vec2 m_corner;

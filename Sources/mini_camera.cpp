@@ -11,9 +11,11 @@ Camera::Camera(glm::vec3 position)
 
 void Camera::GetViewMatrix(glm::mat4& viewMtx)
 {
-    viewMtx = glm::translate(mat4(), -vec3(m_position)) *
-            glm::rotate(mat4(), degrees(-m_angleY), glm::vec3(0,1,0)) *
-            glm::rotate(mat4(), degrees(-m_angleX), glm::vec3(1,0,0));
+    viewMtx =
+            glm::rotate(mat4(), degrees(-m_angleX), glm::vec3(1,0,0))
+            * glm::rotate(mat4(), degrees(-m_angleY), glm::vec3(0,1,0))
+            * glm::translate(mat4(), -vec3(m_position))
+            ;
 }
 
 glm::mat4 Camera::GetViewMatrix()
@@ -25,12 +27,12 @@ glm::mat4 Camera::GetViewMatrix()
 
 glm::vec4 Camera::getForwardDir()
 {
-    return rotateY(vec4(0, 0, 1, 0), m_angleY);
+    return rotateY(vec4(0, 0, 1, 0), degrees(m_angleY));
 }
 
 glm::vec4 Camera::getRightDir()
 {
-    return rotateY(vec4(1, 0, 0, 0), m_angleY);
+    return rotateY(vec4(1, 0, 0, 0), degrees(m_angleY));
 }
 
 void Camera::Move(glm::vec3 v)

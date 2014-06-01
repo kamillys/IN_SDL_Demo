@@ -9,11 +9,13 @@
 int main(int argc, char *argv[])
 {
     SDLApplication sdlapp;
-    std::unique_ptr<INScene> app;
+    //std::unique_ptr<INScene> app;
+    std::unique_ptr<GLWindowBase> app;
     int exitCode = 0;
     try
     {
         app.reset(new INScene(&sdlapp, 1280, 720));
+        //app.reset(new TestTextures(&sdlapp, 1280, 720));
 
         sdlapp.mainLoop();
     }

@@ -58,7 +58,7 @@ void SceneGraph::setNodeTransform(unsigned int nodeIndex, const mat4& transform)
         parentTransform = mat4();
 	else 
         parentTransform = m_nodes[parentIndex].m_transform;
-    mat4 myTransform = transform*parentTransform;
+    mat4 myTransform = parentTransform*transform;
     m_nodes[nodeIndex].m_transform = myTransform;
 	int meshIdx = m_nodes[nodeIndex].m_mesh;
 	if (meshIdx != -1)
@@ -92,7 +92,7 @@ void SceneGraph::UpdateChildTransforms(unsigned int childIndex, mat4 parentTrans
     while(childIndex >= 0 && childIndex < m_nodes.size())
 	{
         mat4 my = m_nodes[childIndex].m_localTransform;
-		my *= parentTransform;
+        my = parentTransform * my;
         m_nodes[childIndex].m_transform = my;
 		int meshIdx = m_nodes[childIndex].m_mesh;
         if (meshIdx >=0 && meshIdx < m_meshes.size())

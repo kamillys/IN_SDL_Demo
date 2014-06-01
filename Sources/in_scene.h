@@ -21,36 +21,50 @@ public:
           m_camera(glm::vec3(0, 1.6f, 0))
     {
         setTitle("Sample");
+        keyUp = false;
+        keyDown = false;
+        keyLeft = false;
+        keyRight = false;
+        mouseInited = false;
     }
     virtual ~INScene(){}
 
-    float T = 0;
-
 protected:
+
+    bool keyUp;
+    bool keyDown;
+    bool keyLeft;
+    bool keyRight;
+    int mouseX, mouseY;
+    bool mouseInited;
+
+    void action();
+
     virtual void resizeGL();
     virtual void initGL();
     virtual void displayGL();
     virtual void Update(float dt);
     virtual void ProcessEvent(const SDL_Event& event);
 
+    //Starts the door opening animation if the door isn't fully open
+    void OpenDoor();
+    //Starts the door closing animation if the door isn't fully closed
+    void CloseDoor();
+    //Toggles between the door opening and closing animation
+    void ToggleDoor();
+    //Moves the character forward by dx and right by dz in relation to the current camera orientation
+    void MoveCharacter(float dx, float dz);
+    //Checks if the camera is facing the door
+    bool FacingDoor();
+    //Returns the distance from the character to the door
+    float DistanceToDoor();
 
-    //IDirectInput8* di;
-    //IDirectInputDevice8* pMouse;
-    //IDirectInputDevice8* pKeyboard;
-
-    //std::unique_ptr<ConstantBuffer<DirectX::XMFLOAT4X4>> m_cbProj;
-    //std::unique_ptr<ConstantBuffer<DirectX::XMFLOAT4X4>> m_cbView;
-    //std::unique_ptr<ConstantBuffer<DirectX::XMFLOAT4X4, 2> > m_cbModel;
-    //std::unique_ptr<ConstantBuffer<mini::Material::MaterialData>> m_cbMaterial;
+    void UpdateDoor(float dt);
 
     VTF::RefPointer<TexturedMaterial> m_texturedEffect;
-    //std::unique_ptr<mini::TexturedEffect> m_texturedEffect;
     std::unique_ptr<mini::SceneGraph> m_sceneGraph;
 
     mini::Material* m_material;
-    //mini::dx_ptr<ID3D11InputLayout> m_layout;
-    //mini::dx_ptr<ID3D11RasterizerState> m_rsState;
-    //mini::dx_ptr<ID3D11SamplerState> m_sampler;
     //mini::dx_ptr<IFW1Factory> m_fontFactory;
     //mini::dx_ptr<IFW1FontWrapper> m_font;
     mini::Camera m_camera;

@@ -30,6 +30,7 @@ protected:
 
     virtual void ProcessEvent(const SDL_Event& event);
     virtual void Update(float dt);
+    inline SDL_Window* window() const { return displayWindow; }
 private:
     void initialize();
     void render();
