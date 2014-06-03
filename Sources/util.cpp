@@ -4,6 +4,7 @@
 
 
 //TODO: Rewrite to be usable for MS Visual Studio
+//Use ifdef WIN32 to detect windows!
 
 void DebugLog(const char* format, ...)
 {

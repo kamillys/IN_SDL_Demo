@@ -31,7 +31,7 @@ endif()
 # Enable C++11
 list( APPEND CMAKE_CXX_FLAGS "-std=c++11" )
 
-pkg_check_modules(SDL2 REQUIRED sdl2 SDL2_image gl glu glew)
+pkg_check_modules(SDL2 REQUIRED sdl2 SDL2_image SDL2_ttf gl glu glew)
 set(INCLUDEDIRS ${INCLUDEDIRS} ${SDL2_INCLUDE_DIRS})
 set(PROJECTLIBS ${PROJECTLIBS} ${SDL2_LIBRARIES} )
 

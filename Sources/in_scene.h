@@ -10,7 +10,7 @@
 #include "mini_collision.h"
 #include "mini_sceneGraph.h"
 #include "OpenGL/TexturedMaterial.h"
-
+#include "OpenGL/TextRenderer.h"
 #include "OpenGL/shader.h"
 
 #include "confReader.h"
@@ -72,6 +72,8 @@ protected:
     virtual void Update(float dt);
     virtual void ProcessEvent(const SDL_Event& event);
 
+    void DrawString();
+
     //Starts the door opening animation if the door isn't fully open
     void OpenDoor();
     //Starts the door closing animation if the door isn't fully closed
@@ -91,6 +93,7 @@ protected:
     std::unique_ptr<mini::SceneGraph> m_sceneGraph;
 
     mini::Material* m_material;
+    VTF::RefPointer<TextRenderer> m_textRenderer;
     //mini::dx_ptr<IFW1Factory> m_fontFactory;
     //mini::dx_ptr<IFW1FontWrapper> m_font;
     mini::Camera m_camera;

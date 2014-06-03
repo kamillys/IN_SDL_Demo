@@ -13,7 +13,7 @@ namespace mini
 	class XFileLoader
 	{
 	public:
-        XFileLoader(/*mini::DxDevice& d*/) /*: m_device(d)*/ { }
+        XFileLoader() { }
 
 		std::vector<mini::Mesh> m_meshes;
 		std::vector<mini::SceneNode> m_nodes;
@@ -49,7 +49,6 @@ namespace mini
 
 		void SkipToken(std::istream& s, XFileToken::Type type);
 
-        //mini::DxDevice& m_device;
 		std::map<std::string, unsigned int> m_materialLookup;
 	};
 }

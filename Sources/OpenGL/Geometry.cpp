@@ -88,6 +88,7 @@ void Geometry::updateBuffers()
 
 void Geometry::bindData(std::vector<GLint> &boundLocations, ShaderProgram* shader)
 {
+    updateBuffers();
     UNUSED(shader);
     UNUSED(boundLocations);
 #define X(type, name) \
@@ -122,6 +123,7 @@ void Geometry::draw(ShaderProgram* shader)
 
 void Geometry::indicedDraw(ShaderProgram *shader)
 {
+    _abo.bind();
     std::vector<GLint> boundLocations;
 
     //bind data

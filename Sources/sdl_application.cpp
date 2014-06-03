@@ -1,17 +1,21 @@
 #include <SDL_events.h>
 #include <chrono>
 #include <thread>
-
+#include <SDL_ttf.h>
+#include "exception.h"
 #include "sdl_application.h"
 
 
 SDLApplication::SDLApplication()
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
+    if (TTF_Init() == -1)
+        THROW_EXCEPTION("Cannot load TTF!");
 }
 
 SDLApplication::~SDLApplication()
 {
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -93,7 +97,7 @@ void SDLApplication::initialize()
 void SDLApplication::update(double T)
 {
     for (int i=0; i<windows.size(); ++i)
-        windows[i]->Update(0.01);
+        windows[i]->Update(T);
 }
 
 void SDLApplication::render()

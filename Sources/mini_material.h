@@ -13,7 +13,6 @@ class Material;
 
 namespace mini
 {
-//TODO: Whole thing
 class Material
 {
 public:

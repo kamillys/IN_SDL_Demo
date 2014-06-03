@@ -229,7 +229,7 @@ void XFileLoader::ReadMeshNormals(istream&s, vector<vec3>& normals, vector<unsig
 	XFileToken t = XFileToken::NextToken(s);
 	if (t.m_type == XFileToken::Identifier)
 	{
-		//m_meshes[meshIdx].m_name = t.m_content;
+        //m_meshes[meshIdx].m_name = t.m_content;
 		t = XFileToken::NextToken(s);
 	}
     if (t.m_type != XFileToken::LeftBrace)
@@ -267,7 +267,6 @@ int XFileLoader::CreateMaterial(const string& materialName, vec4 diffuse, vec4 s
 	if (!textureFilename.empty())
 	{
         string fname(textureFilename.begin(), textureFilename.end());
-        //TODO: set textures
         m_materials[materialIdx].setDiffuseTexture(move(VBGL::Texture2D::loadTexture(fname)));
 		auto ext = fname.rfind(L'.');
         if (ext == fname.npos)

@@ -65,12 +65,10 @@ void Texture2D::setDefaultParameters()
 
 #include <SDL2/SDL_image.h>
 
-VTF::RefPointer<Texture2D> Texture2D::loadTexture(const char *path)
+VTF::RefPointer<Texture2D> Texture2D::loadTexture(SDL_Surface* surface)
 {
-    SDL_Surface* surface = IMG_Load(path);
     if (!surface)
         THROW_EXCEPTION("Cannot load image!");
-
     GLenum Mode = 0;
     switch (surface->format->BytesPerPixel) {
     case 1:
@@ -95,7 +93,13 @@ VTF::RefPointer<Texture2D> Texture2D::loadTexture(const char *path)
 
     texture->setDefaultParameters();
     texture->setWrap(GL_REPEAT, GL_REPEAT);
-    SDL_FreeSurface(surface);
+    return texture;
+}
 
+VTF::RefPointer<Texture2D> Texture2D::loadTexture(const char *path)
+{
+    SDL_Surface* surface = IMG_Load(path);
+    VTF::RefPointer<Texture2D> texture = loadTexture(surface);
+    SDL_FreeSurface(surface);
     return texture;
 }

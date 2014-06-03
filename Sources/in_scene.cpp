@@ -260,6 +260,21 @@ void INScene::UpdateDoor(float dt)
     }
 }
 
+void INScene::DrawString()
+{
+    std::stringstream str;
+    str << "FPS: " << m_counter.getCount();
+    m_textRenderer->DrawString(str.str().c_str(), vec4(0, 0.6, 1, 1), 10, 10, width(), height());
+
+    if (DistanceToDoor() < 1.0f && FacingDoor())
+    {
+        const char* lockStr = "(E) Otworz/Zamknij drzwi";
+        int strW, strH;
+        m_textRenderer->getFontMetric(lockStr, strW, strH);
+        m_textRenderer->DrawString("(E) Otworz/Zamknij drzwi", vec4(0, 0.6, 1, 1), (width()-strW)/2, (height() - strH)/2, width(), height());
+    }
+}
+
 void INScene::displayGL()
 {
     glClearColor(0.5, 0.5, 1.0, 1);
@@ -286,37 +301,19 @@ void INScene::displayGL()
         m.Render(m_texturedEffect->getShader());
         m_texturedEffect->release();
     }
+    DrawString();
 }
 
 void INScene::initGL()
 {
-    /*
-    joystickPresent = SDL_NumJoysticks() > 0;
-    if (joystickPresent)
-    {
-        joystick = SDL_JoystickOpen(0);
-        if (joystick == NULL) {
-            DebugLog("SDL_JoystickOpen failed: %s", SDL_GetError());
-        } else
-        {
-            char guid[64];
-            SDL_JoystickGetGUIDString(SDL_JoystickGetGUID(joystick),
-                                      guid, sizeof (guid));
-            SDL_Log("       axes: %d\n", SDL_JoystickNumAxes(joystick));
-            SDL_Log("      balls: %d\n", SDL_JoystickNumBalls(joystick));
-            SDL_Log("       hats: %d\n", SDL_JoystickNumHats(joystick));
-            SDL_Log("    buttons: %d\n", SDL_JoystickNumButtons(joystick));
-            SDL_Log("instance id: %d\n", SDL_JoystickInstanceID(joystick));
-            SDL_Log("       guid: %s\n", guid);
-            SDL_JoystickClose(joystick);
-        }
-    }*/
     SDL_SetRelativeMouseMode(SDL_TRUE);
     //SDL_SetWindowGrab(window(), SDL_TRUE);
 
     loadKeyMapping();
     //Enable texturing
     glEnable(GL_TEXTURE_2D);
+
+    m_textRenderer = new TextRenderer("Calibri.ttf", 20);
 
     XFileLoader xloader;
     xloader.Load("house.x");

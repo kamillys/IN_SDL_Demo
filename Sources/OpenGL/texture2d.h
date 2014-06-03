@@ -1,6 +1,7 @@
 #pragma once
 
 #include <VTF/Pointers>
+#include <SDL.h>
 #include "myGL.h"
 
 namespace VBGL
@@ -23,6 +24,7 @@ public:
 
     void setDefaultParameters();
 
+    static VTF::RefPointer<Texture2D> loadTexture(SDL_Surface* surface);
     static VTF::RefPointer<Texture2D> loadTexture(const char* path);
     static inline VTF::RefPointer<Texture2D> loadTexture(const std::string& path)
     {
