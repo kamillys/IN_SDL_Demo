@@ -83,8 +83,9 @@ void SDLApplication::mainLoop()
         //Render
         render();
         //Then sleep
-        if (deltaTimeMS < 20)
-            std::this_thread::sleep_for(std::chrono::milliseconds(20 - deltaTimeMS));
+        const long frameTime = 15;
+        if (deltaTimeMS < frameTime)
+            std::this_thread::sleep_for(std::chrono::milliseconds(frameTime - deltaTimeMS));
     }
 }
 

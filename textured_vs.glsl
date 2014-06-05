@@ -21,7 +21,6 @@ const vec4 lightpos2 = vec4(-50.0, 100.0, 50.0, 1.0);
 
 
 void main(){
-    //pos = in_vertices;
     gl_Position = UMVP * vec4(in_vertices, 1.0);
     position = vec3(UModelView * vec4(in_vertices, 1.0));
     normal = vec3(normalize(UModelView * vec4(in_normals, 0.0)));

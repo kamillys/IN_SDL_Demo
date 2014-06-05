@@ -41,6 +41,7 @@ set(PROJECTLIBS ${PROJECTLIBS} ${SDL2_LIBRARIES} )
 
 #Add include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Sources)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ExternalIncludes)
 include_directories(${INCLUDEDIRS})
 
 ##Project sources

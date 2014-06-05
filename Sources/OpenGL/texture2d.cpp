@@ -93,6 +93,8 @@ VTF::RefPointer<Texture2D> Texture2D::loadTexture(SDL_Surface* surface)
 
     texture->setDefaultParameters();
     texture->setWrap(GL_REPEAT, GL_REPEAT);
+    texture->setMagFilter(GL_LINEAR);
+    texture->setMinFilter(GL_LINEAR_MIPMAP_LINEAR);
     return texture;
 }
 

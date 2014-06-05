@@ -5,14 +5,15 @@ using namespace mini;
 using namespace glm;
 
 Camera::Camera(glm::vec3 position)
-    : m_position(position.x, position.y, position.z, 1.0f), m_angleX(0), m_angleY(0)
+    : m_position(position.x, position.y, position.z, 1.0f), m_angleX(0), m_angleY(M_PI_2)
 {
 }
 
 void Camera::GetViewMatrix(glm::mat4& viewMtx)
 {
     viewMtx =
-            glm::rotate(mat4(), degrees(-m_angleX), glm::vec3(1,0,0))
+            glm::scale(mat4(), vec3(-1,1,1))
+            * glm::rotate(mat4(), degrees(-m_angleX), glm::vec3(1,0,0))
             * glm::rotate(mat4(), degrees(-m_angleY), glm::vec3(0,1,0))
             * glm::translate(mat4(), -vec3(m_position))
             ;

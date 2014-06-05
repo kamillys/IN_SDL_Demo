@@ -61,30 +61,30 @@ void INScene::ProcessEvent(const SDL_Event &e)
     case SDL_KEYDOWN:
         code = e.key.keysym.scancode;
         //Asynchronous
-        /*
+
         if (code == keyMapping[ActionKey::MoveUp]) keyUp = true;
         if (code == keyMapping[ActionKey::MoveDown]) keyDown = true;
         if (code == keyMapping[ActionKey::MoveLeft]) keyLeft = true;
         if (code == keyMapping[ActionKey::MoveRight]) keyRight = true;
-        */
+
         doAction |= (code == keyMapping[ActionKey::Action]);
         break;
     case SDL_KEYUP:
         code = e.key.keysym.scancode;
         //Asynchronous
-        /*
+
         if (code == keyMapping[ActionKey::MoveUp]) keyUp = false;
         if (code == keyMapping[ActionKey::MoveDown]) keyDown = false;
         if (code == keyMapping[ActionKey::MoveLeft]) keyLeft = false;
         if (code == keyMapping[ActionKey::MoveRight]) keyRight = false;
-        */
+
         break;
     case SDL_MOUSEMOTION:
-        /*
-        mouseX = -0.005 * e.motion.xrel;
+
+        mouseX =  0.005 * e.motion.xrel;
         mouseY = -0.005 * e.motion.yrel;
         m_camera.Rotate(mouseY, mouseX);
-        */
+
     default: break;
     }
 }
@@ -119,16 +119,16 @@ void INScene::Update(float dt)
 
     if (!joystickPresent)
     {
-    const Uint8 *keys = SDL_GetKeyboardState(NULL);
-    keyUp = keys[keyMapping[ActionKey::MoveUp]];
-    keyDown = keys[keyMapping[ActionKey::MoveDown]];
-    keyLeft = keys[keyMapping[ActionKey::MoveLeft]];
-    keyRight = keys[keyMapping[ActionKey::MoveRight]];
-    keyAction = keys[keyMapping[ActionKey::Action]];
+        const Uint8 *keys = SDL_GetKeyboardState(NULL);
+        keyUp = keys[keyMapping[ActionKey::MoveUp]];
+        keyDown = keys[keyMapping[ActionKey::MoveDown]];
+        keyLeft = keys[keyMapping[ActionKey::MoveLeft]];
+        keyRight = keys[keyMapping[ActionKey::MoveRight]];
+        keyAction = keys[keyMapping[ActionKey::Action]];
     } else
     {
         Sint16 Xaxis = SDL_JoystickGetAxis(joystick, 0);
-        Xaxis = -clamp(Xaxis, -10000, 10000);
+        Xaxis = clamp(Xaxis, -10000, 10000);
         float XSpeed = Xaxis / 10000.0;
         Sint16 Yaxis = SDL_JoystickGetAxis(joystick, 1);
         Yaxis = -clamp(Yaxis, -10000, 10000);
@@ -141,8 +141,9 @@ void INScene::Update(float dt)
 
     int imouseX, imouseY;
     SDL_GetRelativeMouseState(&imouseX, &imouseY);
-    mouseX = -0.005 * imouseX;
+    mouseX =  0.005 * imouseX;
     mouseY = -0.005 * imouseY;
+    m_camera.Rotate(mouseY, mouseX);
 
     //End Synch
 
@@ -153,18 +154,14 @@ void INScene::Update(float dt)
     {
         if (keyUp) dx += 1;
         if (keyDown) dx -= 1;
-        if (keyLeft) dy += 1;
-        if (keyRight) dy -= 1;
+        if (keyLeft) dy -= 1;
+        if (keyRight) dy += 1;
         MoveCharacter(speed*dy*dt, speed*dx*dt);
     }
 
     if (doAction)
         action();
     doAction = false;
-
-    //Comment in case of async
-    m_camera.Rotate(mouseY, mouseX);
-
 
     m_counter.NextFrame(dt);
     UpdateDoor(dt);
@@ -262,6 +259,7 @@ void INScene::UpdateDoor(float dt)
 
 void INScene::DrawString()
 {
+    VBGL::GLStateManager::disableDepthTest();
     std::stringstream str;
     str << "FPS: " << m_counter.getCount();
     m_textRenderer->DrawString(str.str().c_str(), vec4(0, 0.6, 1, 1), 10, 10, width(), height());
@@ -271,16 +269,17 @@ void INScene::DrawString()
         const char* lockStr = "(E) Otworz/Zamknij drzwi";
         int strW, strH;
         m_textRenderer->getFontMetric(lockStr, strW, strH);
-        m_textRenderer->DrawString("(E) Otworz/Zamknij drzwi", vec4(0, 0.6, 1, 1), (width()-strW)/2, (height() - strH)/2, width(), height());
+        m_textRenderer->DrawString(lockStr, vec4(0, 0.6, 1, 1), (width()-strW)/2, (height() - strH)/2, width(), height());
     }
+    VBGL::GLStateManager::enableDepthTest();
 }
 
 void INScene::displayGL()
 {
+    VBGL::GLStateManager::setDefaultGLState();
+    glFrontFace(GL_CW);
     glClearColor(0.5, 0.5, 1.0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    VBGL::GLStateManager::setDefaultGLState();
 
     m_view = m_camera.GetViewMatrix();
 
@@ -307,7 +306,7 @@ void INScene::displayGL()
 void INScene::initGL()
 {
     SDL_SetRelativeMouseMode(SDL_TRUE);
-    //SDL_SetWindowGrab(window(), SDL_TRUE);
+    SDL_SetWindowGrab(window(), SDL_TRUE);
 
     loadKeyMapping();
     //Enable texturing
