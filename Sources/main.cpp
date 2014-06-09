@@ -6,7 +6,7 @@
 #include "in_scene.h"
 #include "util.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[]);
 #ifdef WIN32
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cmdShow);
 #endif
