@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4705E110-9482-463E-B099-A5E7DE42C19A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SampleApp</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>ExternalIncludes;Sources;$(SDL_INCDIR);$(GLEW_INCDIR);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SDL_LIBDIR);$(GLEW_LIBDIR);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>ExternalIncludes;Sources;$(SDL_INCDIR);$(GLEW_INCDIR);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SDL_LIBDIR);$(GLEW_LIBDIR);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;glew32.lib;opengl32.lib;Glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>wWinMain</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2_ttf.lib;glew32.lib;opengl32.lib;Glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>wWinMain</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\confReader.cpp" />
+    <ClCompile Include="sources\exception.cpp" />
+    <ClCompile Include="sources\in_scene.cpp" />
+    <ClCompile Include="sources\main.cpp" />
+    <ClCompile Include="sources\mini_camera.cpp" />
+    <ClCompile Include="sources\mini_collision.cpp" />
+    <ClCompile Include="sources\mini_material.cpp" />
+    <ClCompile Include="sources\mini_mesh.cpp" />
+    <ClCompile Include="sources\mini_sceneGraph.cpp" />
+    <ClCompile Include="sources\mini_sceneNode.cpp" />
+    <ClCompile Include="sources\mini_xfileLoader.cpp" />
+    <ClCompile Include="sources\mini_xfileToken.cpp" />
+    <ClCompile Include="sources\opengl\arrayBuffer.cpp" />
+    <ClCompile Include="sources\opengl\Geometry.cpp" />
+    <ClCompile Include="sources\opengl\GLCaps.cpp" />
+    <ClCompile Include="sources\opengl\GLStateManager.cpp" />
+    <ClCompile Include="sources\opengl\gl_utils.cpp" />
+    <ClCompile Include="sources\opengl\Material.cpp" />
+    <ClCompile Include="sources\opengl\shader.cpp" />
+    <ClCompile Include="sources\opengl\TextRenderer.cpp" />
+    <ClCompile Include="sources\opengl\texture2d.cpp" />
+    <ClCompile Include="sources\opengl\TexturedMaterial.cpp" />
+    <ClCompile Include="sources\sdl_application.cpp" />
+    <ClCompile Include="sources\util.cpp" />
+    <ClCompile Include="sources\vtf\atomics.cpp" />
+    <ClCompile Include="sources\vtf\pointer\RefObject.cpp" />
+    <ClCompile Include="sources\window_base.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sources\confReader.h" />
+    <ClInclude Include="sources\exception.h" />
+    <ClInclude Include="sources\in_scene.h" />
+    <ClInclude Include="sources\mini_camera.h" />
+    <ClInclude Include="sources\mini_collision.h" />
+    <ClInclude Include="sources\mini_fpsCounter.h" />
+    <ClInclude Include="sources\mini_material.h" />
+    <ClInclude Include="sources\mini_mesh.h" />
+    <ClInclude Include="sources\mini_sceneGraph.h" />
+    <ClInclude Include="sources\mini_sceneNode.h" />
+    <ClInclude Include="sources\mini_xfileLoader.h" />
+    <ClInclude Include="sources\mini_xfileToken.h" />
+    <ClInclude Include="sources\opengl\arrayBuffer.h" />
+    <ClInclude Include="sources\opengl\Geometry.h" />
+    <ClInclude Include="sources\opengl\GLCaps.h" />
+    <ClInclude Include="sources\opengl\GLStateManager.h" />
+    <ClInclude Include="sources\opengl\gl_utils.h" />
+    <ClInclude Include="sources\opengl\Material.h" />
+    <ClInclude Include="sources\opengl\myGL.h" />
+    <ClInclude Include="sources\opengl\shader.h" />
+    <ClInclude Include="sources\opengl\TextRenderer.h" />
+    <ClInclude Include="sources\opengl\texture2d.h" />
+    <ClInclude Include="sources\opengl\TexturedMaterial.h" />
+    <ClInclude Include="sources\sdl_application.h" />
+    <ClInclude Include="sources\util.h" />
+    <ClInclude Include="sources\vtf\atomics.h" />
+    <ClInclude Include="sources\vtf\pointer\ownptr.h" />
+    <ClInclude Include="sources\vtf\pointer\RefObject.h" />
+    <ClInclude Include="sources\vtf\pointer\refptr.h" />
+    <ClInclude Include="sources\window_base.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sources\opengl\GLExts.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
