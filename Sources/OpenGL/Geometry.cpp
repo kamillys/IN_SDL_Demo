@@ -4,6 +4,13 @@ using namespace VBGL;
 
 Geometry::Geometry()
 {
+	
+#define X(type, name) \
+    _##name##NeedsUpdate = false;
+
+    GEOMETRY_VECTORED_DATA
+#undef X
+    _type = GL_TRIANGLES;
 }
 
 Geometry::~Geometry()

@@ -91,32 +91,32 @@ void SDLApplication::mainLoop()
 
 void SDLApplication::initialize()
 {
-    for (int i=0; i<windows.size(); ++i)
+    for (size_t i=0; i<windows.size(); ++i)
         windows[i]->initialize();
 }
 
-void SDLApplication::update(double T)
+void SDLApplication::update(float T)
 {
-    for (int i=0; i<windows.size(); ++i)
+    for (size_t i=0; i<windows.size(); ++i)
         windows[i]->Update(T);
 }
 
 void SDLApplication::render()
 {
-    for (int i=0; i<windows.size(); ++i)
+    for (size_t i=0; i<windows.size(); ++i)
         windows[i]->render();
 }
 
 void SDLApplication::parseGlobalEvent(const SDL_Event &event)
 {
-    for (int i=0; i<windows.size(); ++i)
+    for (size_t i=0; i<windows.size(); ++i)
         windows[i]->ProcessSDLEvent(event);
 }
 
 void SDLApplication::parseWindowEvent(const SDL_Event& event, Uint32 windowID)
 {
     SDL_Window* window = SDL_GetWindowFromID(windowID);
-    for (int i=0; i<windows.size(); ++i)
+    for (size_t i=0; i<windows.size(); ++i)
         if (windows[i]->displayWindow == window)
         {
             windows[i]->ProcessSDLEvent(event);

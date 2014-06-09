@@ -7,6 +7,11 @@
 #include "util.h"
 
 int main(int argc, char *argv[])
+#ifdef WIN32
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cmdShow);
+#endif
+
+int main(int argc, char *argv[])
 {
     SDLApplication sdlapp;
     //std::unique_ptr<INScene> app;
@@ -49,3 +54,11 @@ int main(int argc, char *argv[])
     app.reset();
     return exitCode;
 }
+
+#ifdef WIN32
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cmdShow)
+{
+	exit(main(0, NULL));
+	return 0;
+}
+#endif

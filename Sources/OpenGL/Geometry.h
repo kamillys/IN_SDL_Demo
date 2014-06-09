@@ -25,7 +25,7 @@ class Geometry : public VTF::RefObject
 {
 #define X(type, name) \
     std::vector<type> _##name; \
-    bool _##name##NeedsUpdate = false;
+    bool _##name##NeedsUpdate;
     GEOMETRY_VECTORED_DATA
 #undef X
 public:
@@ -39,7 +39,7 @@ public:
     GEOMETRY_INDICES_DATA
 #undef X
 
-    GLenum _type = GL_TRIANGLES;
+    GLenum _type;
     void bindData(std::vector<GLint>&, ShaderProgram *shader);
     //TODO: boundingBox and boundingSphere
 

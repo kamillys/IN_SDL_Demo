@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+
 #include "in_scene.h"
 #include "OpenGL/GLStateManager.h"
 #include <glm/gtc/swizzle.hpp>

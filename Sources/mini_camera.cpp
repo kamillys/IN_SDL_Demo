@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+
 #include "mini_camera.h"
 #include <glm/ext.hpp>
 

@@ -10,10 +10,10 @@ namespace VBGL
 template <int _GLType>
 class RawVertexBufferObject {
     GLuint _vboID;
-    bool valid = false;
-    size_t _count = 0;
+    bool valid;
+    size_t _count;
 public:
-    RawVertexBufferObject() {
+    RawVertexBufferObject() : valid(false), _count(0) {
     }
 
     ~RawVertexBufferObject() {
@@ -84,7 +84,7 @@ typedef RawVertexBufferObject<GL_ELEMENT_ARRAY_BUFFER> IndexBuffer;
 
 class ArrayBufferObject {
     GLuint vaID;
-    bool valid = false;
+    bool valid;
 public:
     ArrayBufferObject();
     ~ArrayBufferObject();

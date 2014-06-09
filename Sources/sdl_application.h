@@ -9,11 +9,11 @@ class SDLApplication;
 #include <vector>
 
 #include "window_base.h"
-
+#include "util.h"
 
 class SDLApplication
 {
-    SDLApplication(const SDLApplication&) = delete;
+	NONCOPYABLE(SDLApplication)
     friend class GLWindowBase;
 
     std::vector<GLWindowBase*> windows; //xD
@@ -23,7 +23,7 @@ class SDLApplication
     void parseGlobalEvent(const SDL_Event &event);
     void initialize();
     void render();
-    void update(double T);
+    void update(float T);
 public:
     SDLApplication();
     ~SDLApplication();

@@ -31,6 +31,7 @@ public:
         mouseInited = false;
         prevAction = false;
         keyAction = false;
+		joystickPresent = false;
     }
     virtual ~INScene()
     {
@@ -50,7 +51,7 @@ protected:
     bool keyAction;
     bool doAction;
 
-    bool joystickPresent = false;
+    bool joystickPresent;
     SDL_Joystick *joystick;
 
     enum class ActionKey {

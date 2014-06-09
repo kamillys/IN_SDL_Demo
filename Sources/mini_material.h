@@ -35,8 +35,7 @@ public:
     void setSpecularTexture(VTF::RefPointer<VBGL::Texture2D>&& tex) { m_specularTexture = std::move(tex); }
 
 private:
-    Material(const Material& right) = delete; //{ /*do not use!*/ throw std::logic_error("Material copy constructor called!"); }
-    Material& operator =(const Material& right) = delete; // { /*do not use*/ throw std::logic_error("Material copy assignment called!"); }
+	NONCOPYABLE(Material);
 
     void Release();
 

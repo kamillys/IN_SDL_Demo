@@ -2,7 +2,7 @@
 
 using namespace VBGL;
 
-ArrayBufferObject::ArrayBufferObject() {
+ArrayBufferObject::ArrayBufferObject() : valid(false) {
 }
 
 ArrayBufferObject::~ArrayBufferObject() {

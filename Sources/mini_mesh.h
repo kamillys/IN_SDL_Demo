@@ -32,11 +32,8 @@ public:
     void setMaterialIdx(unsigned int idx) { m_materialIdx = idx; }
 
 private:
-    Mesh(const Mesh& right) = delete;
-    //{/*do not use*/ throw std::logic_error("Mesh copy constructor should never be called!"); }
+	NONCOPYABLE(Mesh)
 
-    Mesh& operator=(const Mesh& right) = delete;
-    //{ /*do not use*/ throw std::logic_error("Mesh copy assignment should never be called!"); }
     void Release();
 
     VTF::RefPointer<VBGL::Geometry> m_geometry;

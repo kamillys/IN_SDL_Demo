@@ -1,4 +1,4 @@
-#include <glew.h>
+#include <GL/glew.h>
 
 #include "window_base.h"
 #include "util.h"
@@ -87,7 +87,7 @@ void GLWindowBase::ProcessSDLEvent(const SDL_Event &event)
     }
 }
 //Disable logging here
-#define SDL_Log(x...)
+#define SDL_Log(x, ...)
 void GLWindowBase::ProcessWindowEvent(const SDL_Event &event)
 {
     switch (event.window.event) {
